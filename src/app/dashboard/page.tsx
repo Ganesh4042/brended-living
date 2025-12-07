@@ -16,6 +16,8 @@ import {
   Calendar,
 } from "lucide-react";
 
+/* ---------------- Mock Data ---------------- */
+
 const mockProperties = [
   { id: 1, name: "Apartment 1A", address: "Friedrichstraße 123, Berlin", status: "Occupied", rent: 1200 },
   { id: 2, name: "Apartment 2B", address: "Alexanderplatz 45, Berlin", status: "Occupied", rent: 1450 },
@@ -35,120 +37,111 @@ const mockFinancials = {
   expenses: 320,
 };
 
+/* ---------------- Status Colors ---------------- */
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "Resolved":
+    case "Occupied":
+      return "bg-green-100/40 text-green-700 border border-green-300/30";
+    case "In Progress":
+      return "bg-yellow-100/40 text-yellow-700 border border-yellow-300/30";
+    case "Pending":
+    case "Vacant":
+      return "bg-red-100/40 text-red-700 border border-red-300/30";
+    default:
+      return "bg-gray-100/40 text-gray-700 border border-gray-300/30";
+  }
+};
+
 export default function DashboardPage() {
   const { t } = useLanguage();
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Resolved":
-      case "Occupied":
-        return "bg-green-100 text-green-700";
-      case "In Progress":
-        return "bg-yellow-100 text-yellow-700";
-      case "Pending":
-      case "Vacant":
-        return "bg-red-100 text-red-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
-  };
-
   return (
     <div className="min-h-screen bg-[#F5F2EC]">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#071E40] to-[#0F3641] py-16">
-        <div className="container mx-auto px-4">
+
+      {/* ---------------- Hero Section ---------------- */}
+      <section className="relative bg-gradient-to-br from-[#071E40] via-[#0F3641] to-[#071E40] py-20 overflow-hidden">
+        
+        {/* Background Glow */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-[-3rem] right-[-2rem] w-72 h-72 bg-[#D4C9A1] blur-[110px] rounded-full" />
+          <div className="absolute bottom-[-3rem] left-[-2rem] w-80 h-80 bg-[#476A6F] blur-[110px] rounded-full" />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
               {t("dashboard.title")}
             </h1>
-            <p className="text-xl text-white/70">
+            <p className="text-lg md:text-xl text-white/75 leading-relaxed">
               {t("dashboard.subtitle")}
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Dashboard Content */}
-      <section className="py-12">
+      {/* ---------------- Dashboard Content ---------------- */}
+      <section className="py-16">
         <div className="container mx-auto px-4">
-          {/* Stats Overview */}
+
+          {/* ---------------- Stats Cards ---------------- */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
           >
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-[#071E40]/10 rounded-xl flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-[#071E40]" />
-                </div>
-                <span className="text-sm text-[#476A6F]">Properties</span>
-              </div>
-              <div className="text-3xl font-bold text-[#071E40]">3</div>
-              <div className="text-sm text-[#476A6F]">Total Units</div>
-            </div>
+            {/* Total Properties */}
+            <DashboardCard 
+              title="Properties" 
+              value="3" 
+              subtitle="Total Units" 
+              icon={Building2} 
+              iconBg="bg-[#071E40]/20"
+            />
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-green-600" />
-                </div>
-                <span className="text-sm text-[#476A6F]">This Month</span>
-              </div>
-              <div className="text-3xl font-bold text-[#071E40]">€{mockFinancials.collected}</div>
-              <div className="text-sm text-green-600">Rent Collected</div>
-            </div>
+            {/* Rent Collected */}
+            <DashboardCard 
+              title="This Month" 
+              value={`€${mockFinancials.collected}`} 
+              subtitle="Rent Collected" 
+              icon={DollarSign} 
+              iconBg="bg-green-200/40 text-green-700"
+            />
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                  <Wrench className="w-6 h-6 text-yellow-600" />
-                </div>
-                <span className="text-sm text-[#476A6F]">Active</span>
-              </div>
-              <div className="text-3xl font-bold text-[#071E40]">2</div>
-              <div className="text-sm text-[#476A6F]">Open Tickets</div>
-            </div>
+            {/* Open Tickets */}
+            <DashboardCard 
+              title="Active" 
+              value="2" 
+              subtitle="Open Tickets" 
+              icon={Wrench} 
+              iconBg="bg-yellow-200/40 text-yellow-700"
+            />
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 bg-[#D4C9A1]/30 rounded-xl flex items-center justify-center">
-                  <Users className="w-6 h-6 text-[#071E40]" />
-                </div>
-                <span className="text-sm text-[#476A6F]">Occupancy</span>
-              </div>
-              <div className="text-3xl font-bold text-[#071E40]">67%</div>
-              <div className="text-sm text-[#476A6F]">2 of 3 Units</div>
-            </div>
+            {/* Occupancy */}
+            <DashboardCard 
+              title="Occupancy" 
+              value="67%" 
+              subtitle="2 of 3 Units" 
+              icon={Users} 
+              iconBg="bg-[#D4C9A1]/30 text-[#071E40]"
+            />
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Properties Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-[#071E40]">
-                  {t("dashboard.properties.title")}
-                </h2>
-                <Building2 className="w-5 h-5 text-[#476A6F]" />
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+            {/* ---------------- Properties ---------------- */}
+            <GlassPanel title={t("dashboard.properties.title")} icon={Building2}>
               <div className="space-y-4">
                 {mockProperties.map((property) => (
-                  <div
-                    key={property.id}
-                    className="flex items-center justify-between p-4 bg-[#F5F2EC] rounded-xl hover:bg-[#F5F2EC]/70 transition-colors"
-                  >
+                  <GlassItem key={property.id}>
                     <div>
                       <h3 className="font-semibold text-[#071E40]">{property.name}</h3>
                       <p className="text-sm text-[#476A6F]">{property.address}</p>
@@ -159,37 +152,23 @@ export default function DashboardPage() {
                       </span>
                       <p className="text-sm font-semibold text-[#071E40] mt-1">€{property.rent}/mo</p>
                     </div>
-                  </div>
+                  </GlassItem>
                 ))}
               </div>
-            </motion.div>
+            </GlassPanel>
 
-            {/* Maintenance Tickets */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-[#071E40]">
-                  {t("dashboard.tickets.title")}
-                </h2>
-                <Wrench className="w-5 h-5 text-[#476A6F]" />
-              </div>
+            {/* ---------------- Tickets ---------------- */}
+            <GlassPanel title={t("dashboard.tickets.title")} icon={Wrench}>
               <div className="space-y-4">
                 {mockTickets.map((ticket) => (
-                  <div
-                    key={ticket.id}
-                    className="flex items-center justify-between p-4 bg-[#F5F2EC] rounded-xl"
-                  >
+                  <GlassItem key={ticket.id}>
                     <div className="flex items-center space-x-3">
                       {ticket.status === "Resolved" ? (
-                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <CheckCircle className="w-5 h-5 text-green-600" />
                       ) : ticket.status === "In Progress" ? (
-                        <Clock className="w-5 h-5 text-yellow-500" />
+                        <Clock className="w-5 h-5 text-yellow-600" />
                       ) : (
-                        <AlertCircle className="w-5 h-5 text-red-500" />
+                        <AlertCircle className="w-5 h-5 text-red-600" />
                       )}
                       <div>
                         <h3 className="font-semibold text-[#071E40]">{ticket.issue}</h3>
@@ -202,57 +181,23 @@ export default function DashboardPage() {
                       </span>
                       <p className="text-xs text-[#476A6F] mt-1">{ticket.date}</p>
                     </div>
-                  </div>
+                  </GlassItem>
                 ))}
               </div>
-            </motion.div>
+            </GlassPanel>
 
-            {/* Financial Overview */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-[#071E40]">
-                  {t("dashboard.financial.title")}
-                </h2>
-                <TrendingUp className="w-5 h-5 text-[#476A6F]" />
-              </div>
+            {/* ---------------- Financial Overview ---------------- */}
+            <GlassPanel title={t("dashboard.financial.title")} icon={TrendingUp}>
               <div className="space-y-4">
-                <div className="flex justify-between items-center p-4 bg-[#F5F2EC] rounded-xl">
-                  <span className="text-[#476A6F]">Total Expected Rent</span>
-                  <span className="font-bold text-[#071E40]">€{mockFinancials.totalRent}</span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-green-50 rounded-xl">
-                  <span className="text-green-700">Collected</span>
-                  <span className="font-bold text-green-700">€{mockFinancials.collected}</span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-yellow-50 rounded-xl">
-                  <span className="text-yellow-700">Pending</span>
-                  <span className="font-bold text-yellow-700">€{mockFinancials.pending}</span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-red-50 rounded-xl">
-                  <span className="text-red-700">Expenses</span>
-                  <span className="font-bold text-red-700">-€{mockFinancials.expenses}</span>
-                </div>
+                <GlassSummary label="Total Expected Rent" value={`€${mockFinancials.totalRent}`} />
+                <GlassSummary label="Collected" value={`€${mockFinancials.collected}`} color="text-green-700" bg="bg-green-50/50" />
+                <GlassSummary label="Pending" value={`€${mockFinancials.pending}`} color="text-yellow-700" bg="bg-yellow-50/50" />
+                <GlassSummary label="Expenses" value={`-€${mockFinancials.expenses}`} color="text-red-700" bg="bg-red-50/50" />
               </div>
-            </motion.div>
+            </GlassPanel>
 
-            {/* Documents */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-[#071E40]">
-                  {t("dashboard.documents.title")}
-                </h2>
-                <FileText className="w-5 h-5 text-[#476A6F]" />
-              </div>
+            {/* ---------------- Documents ---------------- */}
+            <GlassPanel title={t("dashboard.documents.title")} icon={FileText}>
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { name: "Rental Contracts", count: 3, icon: FileText },
@@ -262,7 +207,7 @@ export default function DashboardPage() {
                 ].map((doc, index) => (
                   <div
                     key={index}
-                    className="p-4 bg-[#F5F2EC] rounded-xl hover:bg-[#F5F2EC]/70 transition-colors cursor-pointer"
+                    className="p-4 rounded-xl bg-white/40 backdrop-blur-md border border-white/60 hover:scale-[1.02] transition-all"
                   >
                     <doc.icon className="w-6 h-6 text-[#476A6F] mb-2" />
                     <h3 className="font-semibold text-[#071E40] text-sm">{doc.name}</h3>
@@ -270,10 +215,68 @@ export default function DashboardPage() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </GlassPanel>
+
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+/* ---------------- Reusable Components ---------------- */
+
+// Dashboard stat card
+function DashboardCard({ title, value, subtitle, icon: Icon, iconBg }: any) {
+  return (
+    <div className="bg-white/40 backdrop-blur-lg border border-white/50 p-6 rounded-2xl shadow-md hover:shadow-xl transition-all hover:scale-[1.02]">
+      <div className="flex items-center justify-between mb-4">
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconBg}`}>
+          <Icon className="w-6 h-6" />
+        </div>
+        <span className="text-sm text-[#476A6F]">{title}</span>
+      </div>
+      <div className="text-3xl font-bold text-[#071E40]">{value}</div>
+      <div className="text-sm text-[#476A6F]">{subtitle}</div>
+    </div>
+  );
+}
+
+// Glass panel container
+function GlassPanel({ title, icon: Icon, children }: any) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="bg-white/40 backdrop-blur-md border border-white/50 rounded-2xl p-8 shadow-lg"
+    >
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-[#071E40]">{title}</h2>
+        <Icon className="w-5 h-5 text-[#476A6F]" />
+      </div>
+
+      {children}
+    </motion.div>
+  );
+}
+
+// Glass list item
+function GlassItem({ children }: any) {
+  return (
+    <div className="flex items-center justify-between p-4 bg-white/50 backdrop-blur-md border border-white/50 rounded-xl hover:scale-[1.01] transition-all">
+      {children}
+    </div>
+  );
+}
+
+// Summary row
+function GlassSummary({ label, value, color = "text-[#071E40]", bg = "bg-[#F5F2EC]" }: any) {
+  return (
+    <div className={`flex justify-between items-center p-4 rounded-xl ${bg}`}>
+      <span className={color}>{label}</span>
+      <span className={`font-bold ${color}`}>{value}</span>
     </div>
   );
 }

@@ -3,7 +3,13 @@
 import React from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
-import { Users, Wallet, Wrench, FileText, Headphones, Shield, Clock, TrendingUp } from "lucide-react";
+import {
+  Users,
+  Wallet,
+  Wrench,
+  FileText,
+  Headphones,
+} from "lucide-react";
 
 const services = [
   {
@@ -68,96 +74,116 @@ export default function WhatWeDoPage() {
 
   return (
     <div className="min-h-screen bg-[#F5F2EC]">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#071E40] to-[#0F3641] py-20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              {t("whatWeDo.title")}
-            </h1>
-            <p className="text-xl text-white/70">
-              {t("whatWeDo.subtitle")}
-            </p>
-          </motion.div>
+
+      {/* ---------------- HERO ---------------- */}
+      <section className="relative bg-gradient-to-br from-[#071E40] via-[#0F3641] to-[#071E40] py-24 overflow-hidden">
+        {/* Glow Background */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute -top-20 right-0 w-96 h-96 bg-[#D4C9A1] blur-[140px] rounded-full"></div>
+          <div className="absolute -bottom-20 left-0 w-[28rem] h-[28rem] bg-[#476A6F] blur-[150px] rounded-full"></div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 text-center max-w-3xl mx-auto"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            {t("whatWeDo.title")}
+          </h1>
+          <p className="text-white/70 text-lg">{t("whatWeDo.subtitle")}</p>
+        </motion.div>
       </section>
 
-      {/* Services Grid */}
+      {/* ---------------- SERVICES ---------------- */}
       <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="space-y-16">
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`flex flex-col ${
-                  index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                } items-center gap-12`}
-              >
-                <div className="flex-1">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#071E40] to-[#0F3641] rounded-2xl flex items-center justify-center mb-6">
-                    <service.icon className="w-8 h-8 text-[#D4C9A1]" />
-                  </div>
-                  <h2 className="text-3xl font-bold text-[#071E40] mb-4">
-                    {t(service.titleKey)}
-                  </h2>
-                  <p className="text-[#476A6F] text-lg mb-6">
-                    {t(service.descKey)}
-                  </p>
-                  <ul className="space-y-3">
-                    {service.details.map((detail, idx) => (
-                      <li key={idx} className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-[#D4C9A1] rounded-full" />
-                        <span className="text-[#476A6F]">{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
+        <div className="container mx-auto px-4 space-y-24">
+
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className={`
+                flex flex-col-reverse lg:flex-row
+                ${index % 2 !== 0 ? "lg:flex-row-reverse" : ""} 
+                items-center gap-14
+              `}
+            >
+
+              {/* ----- TEXT CONTENT ----- */}
+              <div className="flex-1">
+                <div className="w-20 h-20 bg-white/60 backdrop-blur-xl rounded-2xl border border-white/70 shadow-md flex items-center justify-center mb-6">
+                  <service.icon className="w-10 h-10 text-[#071E40]" />
                 </div>
-                <div className="flex-1">
-                  <div className="bg-white rounded-2xl p-8 shadow-lg">
-                    <div className="aspect-video bg-gradient-to-br from-[#071E40]/5 to-[#0F3641]/10 rounded-xl flex items-center justify-center">
-                      <service.icon className="w-24 h-24 text-[#476A6F]/30" />
-                    </div>
+
+                <h2 className="text-3xl font-bold text-[#071E40] mb-4">
+                  {t(service.titleKey)}
+                </h2>
+
+                <p className="text-lg text-[#476A6F] mb-6">
+                  {t(service.descKey)}
+                </p>
+
+                <ul className="space-y-3">
+                  {service.details.map((d, i) => (
+                    <li key={i} className="flex items-center space-x-3">
+                      <div className="w-2.5 h-2.5 bg-[#D4C9A1] rounded-full"></div>
+                      <span className="text-[#476A6F]">{d}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* ----- IMAGE / ICON BOX ----- */}
+              <div className="flex-1">
+                <div className="bg-white/60 backdrop-blur-xl rounded-3xl border border-white/70 shadow-xl p-10">
+                  <div className="aspect-video bg-gradient-to-br from-[#071E40]/10 to-[#0F3641]/20 rounded-2xl flex items-center justify-center">
+                    <service.icon className="w-32 h-32 text-[#476A6F]/30" />
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-[#071E40]">
-        <div className="container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Ready to Get Started?
-            </h2>
-            <p className="text-white/70 mb-8 max-w-2xl mx-auto">
-              Let us handle your property management while you enjoy stress-free ownership.
-            </p>
-            <a
-              href="/contact"
-              className="inline-block bg-[#D4C9A1] hover:bg-[#c4b991] text-[#071E40] px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
-            >
-              Contact Us Today
-            </a>
-          </motion.div>
+      {/* ---------------- CTA ---------------- */}
+      <section className="relative bg-gradient-to-br from-[#071E40] via-[#0F3641] to-[#071E40] py-24 mt-20 overflow-hidden">
+        {/* Glow Effects */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-10 right-10 w-72 h-72 bg-[#D4C9A1] blur-[120px] rounded-full"></div>
+          <div className="absolute bottom-10 left-10 w-80 h-80 bg-[#476A6F] blur-[120px] rounded-full"></div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 text-center max-w-3xl mx-auto"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to Get Started?
+          </h2>
+
+          <p className="text-white/70 mb-8 text-lg max-w-2xl mx-auto">
+            Let us handle your property management while you enjoy stress-free ownership.
+          </p>
+
+          <a
+            href="/contact"
+            className="inline-block bg-[#D4C9A1] hover:bg-[#c4b991] text-[#071E40] px-10 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+          >
+            Contact Us Today
+          </a>
+        </motion.div>
       </section>
+
     </div>
   );
 }
