@@ -1,17 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Menu, X, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { language, toggleLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const pathname = usePathname();
 
   const navLinks = [
     { href: "/", label: t("nav.home") },
@@ -23,85 +20,54 @@ export default function Header() {
     { href: "/about", label: t("nav.about") },
   ];
 
-  // Scroll Effect
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-500 backdrop-blur-xl 
-      ${isScrolled ? "bg-[#071E40]/90 shadow-xl" : "bg-[#071E40]/50 shadow-md"}
-    `}
-    >
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#050509]/70 border-b border-white/5">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="w-10 h-10 bg-gradient-to-br from-[#476A6F] to-[#0F3641] rounded-lg flex items-center justify-center"
-            >
-              <span className="text-white font-bold text-xl">B</span>
-            </motion.div>
-            <span className="text-white font-bold text-lg hidden sm:block">
-              Brandenbed
-            </span>
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F4D58D] to-[#D4AF37] flex items-center justify-center shadow-[0_0_25px_rgba(244,213,141,0.6)]">
+              <span className="text-[#050509] font-extrabold text-xl">B</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold tracking-[0.18em] uppercase text-[#9CA3AF]">
+                Brandenbed
+              </span>
+              <span className="text-xs text-[#6B7280] hidden sm:block">
+                Living Spaces
+              </span>
+            </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center space-x-8">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative text-sm font-medium transition-all duration-300 
-                    ${isActive ? "text-[#D4C9A1]" : "text-white/80 hover:text-white"}
-                  `}
-                >
-                  {link.label}
-
-                  {/* Active bottom indicator */}
-                  {isActive && (
-                    <motion.span
-                      layoutId="active-nav"
-                      className="absolute left-0 right-0 -bottom-1 h-[2px] bg-[#D4C9A1] rounded-full"
-                    />
-                  )}
-                </Link>
-              );
-            })}
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium tracking-wide text-[#9CA3AF] hover:text-[#F4D58D] transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center space-x-4">
-
-            {/* Language Toggle */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
+          {/* Right side: language + mobile menu */}
+          <div className="flex items-center space-x-3">
+            <button
               onClick={toggleLanguage}
-              className="flex items-center space-x-2 bg-white/10 border border-white/20 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-md"
+              className="hidden sm:flex items-center space-x-2 rounded-full border border-white/10 px-4 py-2 text-xs font-medium text-[#E5E7EB] hover:border-[#F4D58D]/60 hover:text-[#F4D58D] transition-colors"
             >
               <Globe className="w-4 h-4" />
-              <span className="font-medium text-sm">
-                {language.toUpperCase()}
-              </span>
-            </motion.button>
+              <span>{language.toUpperCase()}</span>
+            </button>
 
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-white p-2"
+              className="lg:hidden inline-flex items-center justify-center rounded-md p-2 text-[#E5E7EB]"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
-
           </div>
         </div>
       </div>
@@ -113,25 +79,27 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[#0F3641]/95 backdrop-blur-xl border-t border-white/10"
+            className="lg:hidden bg-[#050509]/95 border-t border-white/10 backdrop-blur-xl"
           >
-            <nav className="container mx-auto px-4 py-6 flex flex-col space-y-4">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
+            <nav className="container mx-auto px-4 py-4 flex flex-col space-y-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-[#D1D5DB] hover:text-[#F4D58D] text-sm font-medium py-2"
+                >
+                  {link.label}
+                </Link>
+              ))}
 
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`text-base font-medium py-2 transition-all duration-300 
-                      ${isActive ? "text-[#D4C9A1]" : "text-white/80 hover:text-white"}
-                    `}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
+              <button
+                onClick={toggleLanguage}
+                className="mt-4 inline-flex items-center space-x-2 rounded-full border border-white/10 px-4 py-2 text-xs font-medium text-[#E5E7EB] hover:border-[#F4D58D]/60 hover:text-[#F4D58D] transition-colors w-fit"
+              >
+                <Globe className="w-4 h-4" />
+                <span>{language.toUpperCase()}</span>
+              </button>
             </nav>
           </motion.div>
         )}

@@ -10,53 +10,49 @@ export default function CTASection() {
   const { t } = useLanguage();
 
   return (
-    <section className="py-24 bg-gradient-to-br from-[#071E40] via-[#0F3641] to-[#071E40] relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-[-4rem] right-[-2rem] w-72 h-72 bg-[#D4C9A1] rounded-full blur-3xl" />
-        <div className="absolute bottom-[-4rem] left-[-2rem] w-80 h-80 bg-[#476A6F] rounded-full blur-3xl" />
+    <section className="relative py-20 bg-[#050509] overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[-4rem] right-10 w-80 h-80 bg-[#F4D58D]/20 blur-[120px]" />
+        <div className="absolute bottom-[-6rem] left-10 w-96 h-96 bg-[#4C1D95]/50 blur-[150px]" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="max-w-4xl mx-auto"
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mx-auto text-center rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 shadow-[0_25px_60px_rgba(0,0,0,0.75)]"
         >
-          <div className="bg-white/5 border border-white/10 rounded-3xl px-6 py-10 md:px-12 md:py-14 shadow-2xl backdrop-blur-md text-center">
-            {/* Small label */}
-            <span className="inline-block px-4 py-1 mb-5 text-xs font-semibold tracking-[0.2em] rounded-full bg-white/10 text-[#D4C9A1] uppercase">
-              Brandenbed Living Spaces
-            </span>
+          <p className="text-xs font-semibold tracking-[0.35em] uppercase text-[#9CA3AF] mb-2">
+            NEXT STEP
+          </p>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">
-              Ready to Experience Stress-Free Property Management?
-            </h2>
+          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+            Ready to experience stress-free property ownership?
+          </h2>
 
-            <p className="text-base md:text-lg text-white/75 mb-10 max-w-2xl mx-auto">
-              Join hundreds of satisfied property owners who trust Brandenbed
-              Living Spaces with their investments. Get started today.
-            </p>
+          <p className="text-sm md:text-base text-[#9CA3AF] mb-8">
+            Let our team handle the tenants, maintenance, and reporting while you
+            enjoy a calm, predictable return on your investment.
+          </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/pricing"
-                className="group flex items-center space-x-2 bg-[#D4C9A1] hover:bg-[#c4b991] text-[#071E40] px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                <span>{t("hero.cta.explore")}</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/pricing"
+              className="group inline-flex items-center justify-center space-x-2 rounded-full bg-[#F4D58D] px-8 py-3 text-sm font-semibold text-[#111827] shadow-[0_0_30px_rgba(244,213,141,0.7)] hover:bg-[#e7c777] transition-all"
+            >
+              <span>{t("hero.cta.explore")}</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
 
-              <Link
-                href="/contact"
-                className="group flex items-center space-x-2 bg-transparent border-2 border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300"
-              >
-                <Phone className="w-5 h-5" />
-                <span>{t("hero.cta.contact")}</span>
-              </Link>
-            </div>
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center space-x-2 rounded-full border border-white/15 bg-transparent px-8 py-3 text-sm font-semibold text-[#E5E7EB] hover:border-[#F4D58D]/70 hover:text-[#F4D58D] transition-all"
+            >
+              <Phone className="w-4 h-4" />
+              <span>{t("hero.cta.contact")}</span>
+            </Link>
           </div>
         </motion.div>
       </div>
